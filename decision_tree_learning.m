@@ -32,19 +32,19 @@ else
         
     %handle zero cases
     if isempty(zero_ex)
-        new_tree.kids{0} = struct('class',mode(zero_tgt),'kids',[]);
+        new_tree.kids{1} = struct('class',mode(zero_tgt),'kids',[]);
     else
         new_attrs = attrs;
         new_attrs(best_attr) = [];
-        new_tree.kids{0} = decision_tree_learning(zero_ex, new_attrs, zero_tgt);
+        new_tree.kids{1} = decision_tree_learning(zero_ex, new_attrs, zero_tgt);
     end    
     %handle one cases
     if isempty(one_ex)
-        new_tree.kids{1} = struct('class',mode(one_tgt),'kids',[]);
+        new_tree.kids{2} = struct('class',mode(one_tgt),'kids',[]);
     else
         new_attrs = attrs;
         new_attrs(best_attr) = [];
-        new_tree.kids{1} = decision_tree_learning(one_ex, new_attrs, one_tgt);
+        new_tree.kids{2} = decision_tree_learning(one_ex, new_attrs, one_tgt);
     end    
 %return
     decision_tree = new_tree;
