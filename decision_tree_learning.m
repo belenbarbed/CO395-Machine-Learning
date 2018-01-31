@@ -12,12 +12,12 @@ elseif isempty(attrs)
 else
     best_attr = choose_best_decision_attribute(examples,attrs,tgts);
     new_tree.op = best_attr;
-    [rows, col] = size(examples);
+    [rows, ~] = size(examples);
     
-    zero_ex = []
-    zero_tgt = []
-    one_ex = []
-    one_tgt = []
+    zero_ex = [];
+    zero_tgt = [];
+    one_ex = [];
+    one_tgt = [];
     
     %split examples according to the selected attribute
     for row=1:rows
@@ -32,22 +32,22 @@ else
         
     %handle zero cases
     if isempty(zero_ex)
-        tree.kids{0} = struct('class',mode(zero_tgt),'kids',[]);
+        new_tree.kids{0} = struct('class',mode(zero_tgt),'kids',[]);
     else
         new_attrs = attrs;
         new_attrs(best_attr) = [];
-        tree.kids{0} = decision_tree_learning(zero_ex, new_attrs, zero_tgt);
+        new_tree.kids{0} = decision_tree_learning(zero_ex, new_attrs, zero_tgt);
     end    
     %handle one cases
     if isempty(one_ex)
-        tree.kids{1} = struct('class',mode(one_tgt),'kids',[]);
+        new_tree.kids{1} = struct('class',mode(one_tgt),'kids',[]);
     else
         new_attrs = attrs;
         new_attrs(best_attr) = [];
-        tree.kids{1} = decision_tree_learning(one_ex, new_attrs, one_tgt);
+        new_tree.kids{1} = decision_tree_learning(one_ex, new_attrs, one_tgt);
     end    
 %return
-    decision_tree = tree;
+    decision_tree = new_tree;
 end
 end
 
