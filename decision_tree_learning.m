@@ -1,13 +1,11 @@
 function [decision_tree] = decision_tree_learning(examples,attrs,tgts)
 %if all binary targets are the same, return a leaf node with that target
 if all(tgts==0) || all(tgts==1)
-    fprintf('lol')
     decision_tree = struct('class',tgts(1),'kids',[]);
 
 %if no more attributes to pick, return leaf with majority value
 elseif isempty(attrs)
     %majority value == mode of targets
-    fprintf('lol')
     decision_tree = struct('class',mode(tgts),'kids',[]);
 
 %else perform ID3 algorithm to select which attribute to split on
@@ -30,11 +28,6 @@ else
             one_ex=[one_ex; examples(row,:)];
             one_tgt=[one_tgt; tgts(row)];
         end
-    end
-    
-    if isempty(best_attr)
-        z = zero_ex
-        o = one_ex
     end
     
     %handle zero cases
