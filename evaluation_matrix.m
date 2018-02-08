@@ -1,4 +1,4 @@
-function eval = evaluation_matrix(C)
+function [eval,CR] = evaluation_matrix(C)
 
 eval = zeros(3,6);
 %                      |_________class_________|
@@ -7,13 +7,14 @@ eval = zeros(3,6);
 %(row2)Precision rate  |   |   |   |   |   |   |
 %(row3)F1 measure      |   |   |   |   |   |   |
 %-----------------------------------------------
+Total_TP = 0;
+Total = sum(sum(C));
 
 for i=1:1:6
    TP = C(i,i);
    FN = sum(C(i,:)) - C(i,i);
    FP = sum(C(:,i)) - C(i,i);
-   %TN = sum(sum(C)) - TP - FN - FP;
-   
+   Total_TP = Total_TP + TP;
    %recall rate
    Rr = (TP/(TP+FN))*100;
    eval(1,i) = Rr;
@@ -23,5 +24,7 @@ for i=1:1:6
    %F1 measure
    eval(3,i) = 2*(Pr*Rr)/(Pr+Rr);   
 end
+
+CR = 100*Total_TP/Total;
 
 end
