@@ -1,8 +1,4 @@
-function tree=decision_tree()
-
-A = load('cleandata_students.mat');
-ex = A.x;
-all_t = A.y;
+function tree=decision_tree(ex, all_t)
 
 att = 1:45;
 
