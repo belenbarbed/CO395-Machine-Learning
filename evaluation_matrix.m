@@ -9,7 +9,7 @@ eval = zeros(5,7);
 %(row4)CR              |   |   |   |   |   |   |NaN|   
 %(row5)Average CR      |NaN|NaN|NaN|NaN|NaN|NaN|   |
 %---------------------------------------------------
-Total_TP = 0;
+
 Total = sum(sum(C));
 
 for i=1:1:6
@@ -17,7 +17,6 @@ for i=1:1:6
    FN = sum(C(i,:)) - C(i,i);
    FP = sum(C(:,i)) - C(i,i);
    TN = Total - TP - FN - FP;
-   Total_TP = Total_TP + TP;
    
    %recall rate
    Rr = (TP/(TP+FN))*100;
