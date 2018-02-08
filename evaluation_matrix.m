@@ -8,12 +8,12 @@ eval = zeros(3,6);
 %(row3)F1 measure      |   |   |   |   |   |   |
 %-----------------------------------------------
 Total_TP = 0;
+Total = sum(sum(C));
 
 for i=1:1:6
    TP = C(i,i);
    FN = sum(C(i,:)) - C(i,i);
    FP = sum(C(:,i)) - C(i,i);
-   Total = sum(sum(C));
    Total_TP = Total_TP + TP;
    %recall rate
    Rr = (TP/(TP+FN))*100;
