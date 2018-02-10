@@ -20,7 +20,7 @@ function drawtree(tree,titletext)
 % Set tree titles
 if nargin < 2
     %titletext = 'Displaying GPLAB-tree found';
-    titletext = 'Displaying Decision Tree';
+    titletext = 'Decision Tree';
 end
 % Using new figure to display tree
 h=figure; % new figure for this particular tree
