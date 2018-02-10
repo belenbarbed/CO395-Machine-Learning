@@ -1,4 +1,4 @@
-function run_trees(strategy, dataset)
+function trees=run_trees(strategy, dataset)
 % USAGE: 
 % strategy - 1 = random, 2 = min depth, 3 = max depth
 % dataset - 1 = clean, 2 = noisy
