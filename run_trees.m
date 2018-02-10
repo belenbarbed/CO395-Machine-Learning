@@ -43,9 +43,9 @@ targets = [targets, [t1; t2; t3; t4; t5; t6; t7; t8; t9]];
 test_examples = {e1, e2, e3, e4, e5, e6, e7, e8, e9, e10};
 actual_tgt = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10};
 
-for i=1:1:1   
+for i=1:1:10  
     trees{i} = decision_tree(examples{i}, targets{i});
-    [test_rows, ~] = size(test_examples{i})
+    [test_rows, ~] = size(test_examples{i});
     
     %preallocate the prediction vector
     predict_tgt = zeros(test_rows,1);
@@ -78,7 +78,7 @@ for i=1:1:1
             %first one...
             predict_tgt(r) = bin_test(1);
         else
-            fprintf("Lie down, try not to cry, cry a lot - the tree isn't working.")
+            fprintf("Mo solutions found for fold %i example %i.\n", i, r)
         end
     end
     
