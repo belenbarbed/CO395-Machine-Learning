@@ -1,4 +1,7 @@
 function predictions = testTrees(T,x2, strategy)
+%USAGE: T - decision tree, x2 - examples to test, 
+% strategy - 1 = random, 2 = min depth, 3 = max depth
+
 predict_tgt = [];
 
 [test_rows, ~] = size(x2);
