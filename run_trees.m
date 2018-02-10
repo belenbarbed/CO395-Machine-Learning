@@ -77,12 +77,13 @@ for i=1:1:10
             
         %non-ideal scenario - we need to pick one of the possible options
         elseif (sols_found > 1)
-            %TODO: make this do something smarter than just picking the
-            %first one...
-            predict_tgt = [predict_tgt; bin_test(1)];
+            %TODO: add a second strategy (depth based)
+            guess = randi([1 sols_found]);
+            predict_tgt = [predict_tgt; bin_test(guess)];
         else
-            %FIXME: this does not belong here
-            predict_tgt = [predict_tgt; 1];
+            %FIXME: rand is hacky as hell...
+            guess = randi([1 6]);
+            predict_tgt = [predict_tgt; guess];
             fprintf("No solutions found for fold %i example %i.\n", i, r)
         end
     end
