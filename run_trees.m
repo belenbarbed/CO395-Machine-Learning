@@ -1,96 +1,38 @@
-function [trees, conf, eval]=run_trees()
+function run_trees(strategy, dataset)
 
+%load our data
+if dataset == 2
+A = load('noisydata_students.mat');
+else
 A = load('cleandata_students.mat');
+end
+
 all_exs = A.x;
 all_tgts = A.y;
 
 total_size = numel(all_tgts);
 
+%partition into 10 parts
 [e1, e2, e3, e4, e5, e6, e7, e8, e9, e10] = partition(all_exs);
 [t1, t2, t3, t4, t5, t6, t7, t8, t9, t10] = partition(all_tgts);
 
-examples = {};
-targets = {};
+%generate the folds
+[examples, targets, test_examples] = fold(e1, e2, e3, e4, e5, e6, e7, e8, e9, e10, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
 
-examples = [examples, [e2; e3; e4; e5; e6; e7; e8; e9; e10]];
-targets = [targets, [t2; t3; t4; t5; t6; t7; t8; t9; t10]];
-
-examples = [examples, [e1; e3; e4; e5; e6; e7; e8; e9; e10]];
-targets = [targets, [t1; t3; t4; t5; t6; t7; t8; t9; t10]];
-
-examples = [examples, [e1; e2; e4; e5; e6; e7; e8; e9; e10]];
-targets = [targets, [t1; t2; t4; t5; t6; t7; t8; t9; t10]];
-
-examples = [examples, [e1; e2; e3; e5; e6; e7; e8; e9; e10]];
-targets = [targets, [t1; t2; t3; t5; t6; t7; t8; t9; t10]];
-
-examples = [examples, [e1; e2; e3; e4; e6; e7; e8; e9; e10]];
-targets = [targets, [t1; t2; t3; t4; t6; t7; t8; t9; t10]];
-
-examples = [examples, [e1; e2; e3; e4; e5; e7; e8; e9; e10]];
-targets = [targets, [t1; t2; t3; t4; t5; t7; t8; t9; t10]];
-
-examples = [examples, [e1; e2; e3; e4; e5; e6; e8; e9; e10]];
-targets = [targets, [t1; t2; t3; t4; t5; t6; t8; t9; t10]];
-
-examples = [examples, [e1; e2; e3; e4; e5; e6; e7; e9; e10]];
-targets = [targets, [t1; t2; t3; t4; t5; t6; t7; t9; t10]];
-
-examples = [examples, [e1; e2; e3; e4; e5; e6; e7; e8; e10]];
-targets = [targets, [t1; t2; t3; t4; t5; t6; t7; t8; t10]];
-
-examples = [examples, [e1; e2; e3; e4; e5; e6; e7; e8; e9]];
-targets = [targets, [t1; t2; t3; t4; t5; t6; t7; t8; t9]];
-
-test_examples = {e1, e2, e3, e4, e5, e6, e7, e8, e9, e10};
-%actual_tgt = {t1, t2, t3, t4, t5, t6, t7, t8, t9, t10};
 predict_tgt = [];
 
+%for each fold, run learning and test the trees
 for i=1:1:10  
+    %learning
     trees{i} = decision_tree(examples{i}, targets{i});
-    [test_rows, ~] = size(test_examples{i});
-    %preallocate the prediction vector
-    
-    
-    % for each row in examples, classify the example using the tree
-    for r=1:test_rows
-        
-        % test for each of the 6 emotions
-        bin_test = [];
-        for e=1:1:6
-            
-            %call classification function
-            class_result = get_class(trees{i}(e), test_examples{i}(r:r,:), 0); 
-            
-            %add to array of solutions if found something
-            if class_result
-                bin_test = [bin_test, e];
-            end
-        end
-
-        %check how many solutions we have
-        sols_found = numel(bin_test);
-        
-        %ideal scenario - we are sure an example is emotion e
-        if (sols_found == 1)
-            predict_tgt = [predict_tgt; bin_test(1)];
-            
-        %non-ideal scenario - we need to pick one of the possible options
-        elseif (sols_found > 1)
-            %TODO: add a second strategy (depth based)
-            guess = randi([1 sols_found]);
-            predict_tgt = [predict_tgt; bin_test(guess)];
-        else
-            %FIXME: rand is hacky as hell...
-            guess = randi([1 6]);
-            predict_tgt = [predict_tgt; guess];
-            fprintf("No solutions found for fold %i example %i.\n", i, r)
-        end
-    end
-
+    %generate predictions for 1 fold (100 examples)
+    preds = testTrees(trees{i}, test_examples{i}, strategy);
+    %generate the entire prediction vector (1000 examples)
+    predict_tgt = [predict_tgt; preds];
 end
-    disp(size(predict_tgt))
-    conf = confusion_matrix(all_tgts, predict_tgt)
-    eval = evaluation_matrix(conf)
-    %DO SOME STATS HERE
+
+%calculate the confusion and evaluation matrices
+conf = confusion_matrix(all_tgts, predict_tgt);
+disp(conf)
+disp(evaluation_matrix(conf))
 end
