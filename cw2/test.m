@@ -47,7 +47,7 @@ nn = paramsNNinit(hiddenLayers, hiddenActivationFunctions);
 nn.epochs = 20;
 
 % set initial learning rate
-nn.trParams.lrParams.initialLR = 0.1; 
+nn.trParams.lrParams.initialLR = 0.01;
 % set the threshold after which the learning rate will decrease (if type
 % = 1 or 2)
 nn.trParams.lrParams.lrEpochThres = 10;
@@ -59,7 +59,7 @@ nn.trParams.momParams.schedulingType = 1;
 %set the epoch where the learning will begin to increase
 nn.trParams.momParams.momentumEpochLowerThres = 10;
 %set the epoch where the learning will reach its final value (usually 0.9)
-nn.trParams.momParams.momentumEpochUpperThres = 15;
+nn.trParams.momParams.momentumEpochUpperThres = 20;
 
 % set weight constraints
 nn.weightConstraints.weightPenaltyL1 = 0;
@@ -81,7 +81,7 @@ nn.dropoutParams.dropoutType = 0;
 nn.earlyStopping = 0;
 nn.max_fail = 10;
 
-nn.type = type;
+nn.type = 2;
 
 % set the type of weight initialisation (check manual for details)
 nn.weightInitParams.type = 8;
