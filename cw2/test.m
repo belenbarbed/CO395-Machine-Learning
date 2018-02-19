@@ -44,10 +44,10 @@ nn = paramsNNinit(hiddenLayers, hiddenActivationFunctions);
 
 % Set some NN params
 %-----
-nn.epochs = 20;
+nn.epochs = 5;
 
 % set initial learning rate
-nn.trParams.lrParams.initialLR = 0.01;
+nn.trParams.lrParams.initialLR = 0.005;
 % set the threshold after which the learning rate will decrease (if type
 % = 1 or 2)
 nn.trParams.lrParams.lrEpochThres = 10;
@@ -107,15 +107,54 @@ nn.biases = biases;
 
 nn = prepareNet4Testing(nn);
 
+dir = 'results/';
+timestamp = datestr(now, 'dd-mm-yy_HH-MM-SS-FFF');
+% visualise loss per epoch
+figure()
+hold on
+p1 = plot(L_train, 'b-', 'Markersize', 8);
+p2 = plot(L_val, 'r-', 'Markersize', 8);
+xlabel('epoch')
+ylabel('loss')
+legend([p1,p2], {'Training','Validation'},'Location','NorthEast')
+hold off
+% save figure
+saveas(gca, strcat(dir, timestamp, '_loss.png'))
+
 % visualise classification error per epoch
 figure()
 hold on
 p1 = plot(clsfError_train, 'b-', 'Markersize', 8);
 p2 = plot(clsfError_val, 'r-', 'Markersize', 8);
-xlabel("epoch")
-ylabel("classification error (%)")
+xlabel('epoch')
+ylabel('classification error (%)')
 legend([p1,p2], {'Training','Validation'},'Location','NorthEast')
 hold off
+% save figure
+saveas(gca, strcat(dir, timestamp, '_clasfError.png'))
+
+% save nn hyperparameters
+% format: ID, nw arch, epochs, initialLR, lrEpochThres, lrShedulingType,
+%         momShedulingType, momEpochLowerThres, momEpochUpperThres,
+%         dropoutType, earlyStopping, max_fail
+%fmt = '%21s %20d %5d %5f %5d %5d %5d %5d %5d %5d %5d %5d\n';
+%fmt = '%21s %5d %5f %5d %5d %5d %5d %5d %5d %5d %5d\n';
+%fprintf(fileID, fmt, [timestamp nn.epochs nn.trParams.lrParams.initialLR nn.trParams.lrParams.lrEpochThres nn.trParams.lrParams.schedulingType nn.trParams.momParams.schedulingType nn.trParams.momParams.momentumEpochLowerThres nn.trParams.momParams.momentumEpochUpperThres nn.dropoutParams.dropoutType nn.earlyStopping nn.max_fail]);
+fileID = fopen(strcat(dir, 'results.txt'),'a');
+fprintf(fileID, '%21s ', timestamp);
+fprintf(fileID, '%5d %5d %5d %2d ', nn.layersSize);
+fprintf(fileID, '%5d ', nn.epochs);
+fprintf(fileID, '%9.3f ', nn.trParams.lrParams.initialLR);
+fprintf(fileID, '%6d ', nn.trParams.lrParams.lrEpochThres);
+fprintf(fileID, '%6d ', nn.trParams.lrParams.schedulingType);
+fprintf(fileID, '%6d ', nn.trParams.momParams.schedulingType);
+fprintf(fileID, '%6d ', nn.trParams.momParams.momentumEpochLowerThres);
+fprintf(fileID, '%6d ', nn.trParams.momParams.momentumEpochUpperThres);
+fprintf(fileID, '%6d ', nn.dropoutParams.dropoutType);
+fprintf(fileID, '%6d ', nn.earlyStopping);
+fprintf(fileID, '%6d ', nn.max_fail);
+fprintf(fileID, '\n');
+fclose(fileID);
 
 % visualise weights of first layer
 figure()
