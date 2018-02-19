@@ -44,7 +44,7 @@ nn = paramsNNinit(hiddenLayers, hiddenActivationFunctions);
 
 % Set some NN params
 %-----
-nn.epochs = 5;
+nn.epochs = 20;
 
 % set initial learning rate
 nn.trParams.lrParams.initialLR = 0.005;
@@ -134,24 +134,23 @@ hold off
 % save figure
 saveas(gca, strcat(dir, timestamp, '_clasfError.png'))
 
-% save nn hyperparameters
+% save nn hyperparameters in text file
 % format: ID, nw arch, epochs, initialLR, lrEpochThres, lrShedulingType,
 %         momShedulingType, momEpochLowerThres, momEpochUpperThres,
 %         dropoutType, earlyStopping, max_fail
 fileID = fopen(strcat(dir, 'results.txt'),'a');
-fprintf(fileID, '%21s ', timestamp);
-% TODO: now only accepts 4 layers
-fprintf(fileID, '%5d %5d %5d %2d ', nn.layersSize);
-fprintf(fileID, '%5d ', nn.epochs);
-fprintf(fileID, '%9.3f ', nn.trParams.lrParams.initialLR);
-fprintf(fileID, '%6d ', nn.trParams.lrParams.lrEpochThres);
-fprintf(fileID, '%6d ', nn.trParams.lrParams.schedulingType);
-fprintf(fileID, '%6d ', nn.trParams.momParams.schedulingType);
-fprintf(fileID, '%6d ', nn.trParams.momParams.momentumEpochLowerThres);
-fprintf(fileID, '%6d ', nn.trParams.momParams.momentumEpochUpperThres);
-fprintf(fileID, '%6d ', nn.dropoutParams.dropoutType);
-fprintf(fileID, '%6d ', nn.earlyStopping);
-fprintf(fileID, '%6d ', nn.max_fail);
+fprintf(fileID, '%21s | ', timestamp);
+fprintf(fileID, strcat(repmat('%5d ', 1, length(nn.layersSize)), ' | '), nn.layersSize);
+fprintf(fileID, '%5d | ', nn.epochs);
+fprintf(fileID, '%9.3f | ', nn.trParams.lrParams.initialLR);
+fprintf(fileID, '%6d | ', nn.trParams.lrParams.lrEpochThres);
+fprintf(fileID, '%6d | ', nn.trParams.lrParams.schedulingType);
+fprintf(fileID, '%6d | ', nn.trParams.momParams.schedulingType);
+fprintf(fileID, '%6d | ', nn.trParams.momParams.momentumEpochLowerThres);
+fprintf(fileID, '%6d | ', nn.trParams.momParams.momentumEpochUpperThres);
+fprintf(fileID, '%6d | ', nn.dropoutParams.dropoutType);
+fprintf(fileID, '%6d | ', nn.earlyStopping);
+fprintf(fileID, '%6d', nn.max_fail);
 fprintf(fileID, '\n');
 fclose(fileID);
 
