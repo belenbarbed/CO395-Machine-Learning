@@ -107,6 +107,7 @@ nn.biases = biases;
 
 nn = prepareNet4Testing(nn);
 
+% RESULTS LOGGING
 dir = 'results/';
 timestamp = datestr(now, 'dd-mm-yy_HH-MM-SS-FFF');
 % visualise loss per epoch
@@ -137,11 +138,9 @@ saveas(gca, strcat(dir, timestamp, '_clasfError.png'))
 % format: ID, nw arch, epochs, initialLR, lrEpochThres, lrShedulingType,
 %         momShedulingType, momEpochLowerThres, momEpochUpperThres,
 %         dropoutType, earlyStopping, max_fail
-%fmt = '%21s %20d %5d %5f %5d %5d %5d %5d %5d %5d %5d %5d\n';
-%fmt = '%21s %5d %5f %5d %5d %5d %5d %5d %5d %5d %5d\n';
-%fprintf(fileID, fmt, [timestamp nn.epochs nn.trParams.lrParams.initialLR nn.trParams.lrParams.lrEpochThres nn.trParams.lrParams.schedulingType nn.trParams.momParams.schedulingType nn.trParams.momParams.momentumEpochLowerThres nn.trParams.momParams.momentumEpochUpperThres nn.dropoutParams.dropoutType nn.earlyStopping nn.max_fail]);
 fileID = fopen(strcat(dir, 'results.txt'),'a');
 fprintf(fileID, '%21s ', timestamp);
+% TODO: now only accepts 4 layers
 fprintf(fileID, '%5d %5d %5d %2d ', nn.layersSize);
 fprintf(fileID, '%5d ', nn.epochs);
 fprintf(fileID, '%9.3f ', nn.trParams.lrParams.initialLR);
