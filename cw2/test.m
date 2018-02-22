@@ -84,7 +84,10 @@ nn.max_fail = 10;
 nn.type = 2;
 
 % set the type of weight initialisation (check manual for details)
-nn.weightInitParams.type = 8;
+nn.weightInitParams.type = 9;
+nn.weightInitParams.sigma            = 0.1;  % st. dev. of gaussian used to initialse weights, applies to type 1 only
+nn.weightInitParams.mean             = 0;    % mean of gaussian used to initialse weights, applies to type 1 only  
+nn.weightInitParams.sparsity         = 0.8;  % number of neurons initialised to 0
 
 % set training method
 % 1: SGD, 2: SGD with momentum, 3: SGD with nesterov momentum, 4: Adagrad, 5: Adadelta,
