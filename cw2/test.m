@@ -153,7 +153,8 @@ fprintf(fileID, '%6d | ', nn.trParams.momParams.momentumEpochLowerThres);
 fprintf(fileID, '%6d | ', nn.trParams.momParams.momentumEpochUpperThres);
 fprintf(fileID, '%6d | ', nn.dropoutParams.dropoutType);
 fprintf(fileID, '%5d | ', nn.earlyStopping);
-fprintf(fileID, '%6d', nn.max_fail);
+fprintf(fileID, '%6d | ', nn.max_fail);
+fprintf(fileID, '%6d',    nn.weightInitParams.type);
 fprintf(fileID, '\n');
 fclose(fileID);
 
