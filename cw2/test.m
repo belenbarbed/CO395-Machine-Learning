@@ -19,7 +19,7 @@ val_y = double(datasetTargets{1,3});
 inputSize = size(train_x,2);
 outputSize = size(train_y,2); % in case of classification it should be equal to the number of classes
 
-hiddenActivationFunctions = {'sigm','sigm','sigm','softmax'};
+hiddenActivationFunctions = {'ReLu','ReLu','ReLu','softmax'};
 hiddenLayers = [500 500 1000 outputSize]; 
 
 % parameters used for visualisation of first layer weights
@@ -44,10 +44,11 @@ nn = paramsNNinit(hiddenLayers, hiddenActivationFunctions);
 
 % Set some NN params
 %-----
+nn.batchsize = 80;
 nn.epochs = 20;
 
 % set initial learning rate
-nn.trParams.lrParams.initialLR = 0.005;
+nn.trParams.lrParams.initialLR = 0.001;
 % set the threshold after which the learning rate will decrease (if type
 % = 1 or 2)
 nn.trParams.lrParams.lrEpochThres = 10;
@@ -59,7 +60,7 @@ nn.trParams.momParams.schedulingType = 1;
 %set the epoch where the learning will begin to increase
 nn.trParams.momParams.momentumEpochLowerThres = 10;
 %set the epoch where the learning will reach its final value (usually 0.9)
-nn.trParams.momParams.momentumEpochUpperThres = 20;
+nn.trParams.momParams.momentumEpochUpperThres = 15;
 
 % set weight constraints
 nn.weightConstraints.weightPenaltyL1 = 0;
@@ -84,7 +85,7 @@ nn.max_fail = 10;
 nn.type = 2;
 
 % set the type of weight initialisation (check manual for details)
-nn.weightInitParams.type = 9;
+nn.weightInitParams.type = 8;
 nn.weightInitParams.sigma            = 0.1;  % st. dev. of gaussian used to initialse weights, applies to type 1 only
 nn.weightInitParams.mean             = 0;    % mean of gaussian used to initialse weights, applies to type 1 only  
 nn.weightInitParams.sparsity         = 0.8;  % number of neurons initialised to 0
@@ -137,12 +138,18 @@ hold off
 % save figure
 saveas(gca, strcat(dir, timestamp, '_clasfError.png'))
 
+% visualise weights of first layer
+figure()
+visualiseHiddenLayerWeights(nn.W{1},visParams.col,visParams.row,visParams.noSubplots);
+[stats, output, e, L] = evaluateNNperformance( nn, test_x, test_y);
+
 % save nn hyperparameters in text file
 % format: ID, nw arch, epochs, initialLR, lrEpochThres, lrShedulingType,
 %         momShedulingType, momEpochLowerThres, momEpochUpperThres,
 %         dropoutType, earlyStopping, max_fail
 fileID = fopen(strcat(dir, 'results.txt'),'a');
 fprintf(fileID, '%21s | ', timestamp);
+fprintf(fileID, '%10.4f | ', stats.clsfRate);
 fprintf(fileID, strcat(repmat('%5d ', 1, length(nn.layersSize)), ' | '), nn.layersSize);
 fprintf(fileID, '%6d | ', nn.epochs);
 fprintf(fileID, '%10.3f | ', nn.trParams.lrParams.initialLR);
@@ -157,9 +164,3 @@ fprintf(fileID, '%6d | ', nn.max_fail);
 fprintf(fileID, '%6d',    nn.weightInitParams.type);
 fprintf(fileID, '\n');
 fclose(fileID);
-
-% visualise weights of first layer
-figure()
-visualiseHiddenLayerWeights(nn.W{1},visParams.col,visParams.row,visParams.noSubplots);
-
-[stats, output, e, L] = evaluateNNperformance( nn, test_x, test_y);
