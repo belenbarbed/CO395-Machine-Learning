@@ -1,4 +1,4 @@
-function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochLowerThres, momentumEpochUpperThres)
+function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions)
 
     % load MNIST data
     load('data4students.mat')
@@ -21,12 +21,13 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
     inputSize = size(train_x,2);
     outputSize = size(train_y,2); % in case of classification it should be equal to the number of classes
 
-    hiddenActivationFunctions = cell(length(hiddenLayers));
-    for i = 1:(length(hiddenLayers)-1)
-        hiddenActivationFunctions(i) = 'ReLu';
-    end
-    hiddenActivationFunctions(length(hiddenLayers)) = 'softmax';
-
+    %   Error (Conversion to cell from char is not possible.) given when this script is run on a doc lab computer (v:R2017a).  
+%     hiddenActivationFunctions = cell(length(hiddenLayers));
+%     for i = 1:(length(hiddenLayers)-1)
+%         hiddenActivationFunctions(i) = 'ReLu';
+%     end
+%     hiddenActivationFunctions(length(hiddenLayers)) = 'softmax';
+    
     % parameters used for visualisation of first layer weights
     visParams.noExamplesPerSubplot = 1; % number of images to show per row
     visParams.noSubplots = floor(hiddenLayers(1) / visParams.noExamplesPerSubplot);
@@ -90,7 +91,7 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
     nn.type = 2;
 
     % set the type of weight initialisation (check manual for details)
-    nn.weightInitParams.type = 8;
+    nn.weightInitParams.type = 3;
 
     % set training method
     % 1: SGD, 2: SGD with momentum, 3: SGD with nesterov momentum, 4: Adagrad, 5: Adadelta,

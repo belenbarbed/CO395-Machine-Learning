@@ -45,8 +45,8 @@ nn.trParams.adam.b1 = 0.9;
 nn.trParams.adam.b2 = 0.999;
 nn.trParams.adam.epsilon = 10^(-8);
 
-nn.weightInitParams.type             = 8;% check manual for details
-nn.weightInitParams.sigma            = 0.1;% st. dev. of gaussian used to initialse weights, applies to type 1 only
+nn.weightInitParams.type             = 3;% check manual for details
+nn.weightInitParams.sigma            = 0.5;% st. dev. of gaussian used to initialse weights, applies to type 1 only
 nn.weightInitParams.mean             = 0; % mean of gaussian used to initialse weights, applies to type 1 only  
 nn.weightInitParams.upperLimit       = 1; %lower limit of uniform distribution, applies to type 2 only
 nn.weightInitParams.lowerLimit       = -1; %upper limit of uniform distribution, applies to type 2 only
