@@ -1,4 +1,4 @@
-function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions)
+function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions, weightInit)
 
     % load MNIST data
     load('data4students.mat')
@@ -91,7 +91,7 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
     nn.type = 2;
 
     % set the type of weight initialisation (check manual for details)
-    nn.weightInitParams.type = 3;
+    nn.weightInitParams.type = weightInit;
 
     % set training method
     % 1: SGD, 2: SGD with momentum, 3: SGD with nesterov momentum, 4: Adagrad, 5: Adadelta,
