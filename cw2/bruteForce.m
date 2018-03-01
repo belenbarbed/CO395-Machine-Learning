@@ -5,28 +5,17 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
 
     % training inputs
     train_x = double(datasetInputs{1,1});
-    % training targets
     train_y = double(datasetTargets{1,1});
 
     % test inputs
     test_x = double(datasetInputs{1,2});
-    % test targets
     test_y = double(datasetTargets{1,2});
 
     % validation inputs
     val_x = double(datasetInputs{1,3});
-    % validation targets
     val_y = double(datasetTargets{1,3});
 
     inputSize = size(train_x,2);
-    outputSize = size(train_y,2); % in case of classification it should be equal to the number of classes
-
-    %   Error (Conversion to cell from char is not possible.) given when this script is run on a doc lab computer (v:R2017a).  
-%     hiddenActivationFunctions = cell(length(hiddenLayers));
-%     for i = 1:(length(hiddenLayers)-1)
-%         hiddenActivationFunctions(i) = 'ReLu';
-%     end
-%     hiddenActivationFunctions(length(hiddenLayers)) = 'softmax';
     
     % parameters used for visualisation of first layer weights
     visParams.noExamplesPerSubplot = 1; % number of images to show per row
@@ -37,26 +26,19 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
     inputActivationFunction = 'linear'; %sigm for binary inputs, linear for continuous input
 
     % normalise data
-    % we assume that data are images so each image is z-normalised. If other
-    % types of data are used then each feature should be z-normalised on the
-    % training set and then mean and standard deviation should be applied to
-    % validation and test sets.
     train_x = normaliseData(inputActivationFunction, train_x, []);
     val_x = normaliseData(inputActivationFunction, val_x, []);
     test_x = normaliseData(inputActivationFunction, test_x, []);
 
     %initialise NN params
     nn = paramsNNinit(hiddenLayers, hiddenActivationFunctions);
-
+    
     % Set some NN params
-    %-----
     nn.batchsize = 80;
     nn.epochs = epoch;
 
     % set initial learning rate
     nn.trParams.lrParams.initialLR = initialLR;
-    % set the threshold after which the learning rate will decrease (if type
-    % = 1 or 2)
     nn.trParams.lrParams.lrEpochThres = lrEpochThres;
     % set the learning rate update policy (check manual)
     % 1 = initialLR*lrEpochThres / max(lrEpochThres, T), 2 = scaling, 3 = lr / (1 + currentEpoch/lrEpochThres)
@@ -104,17 +86,22 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
 
     nn.W = W;
     nn.biases = biases;
-
+  
     % if dropout is used then use max-norm constraint and a
     % high learning rate + momentum with scheduling
     % see the function below for suggested values
-    % nn = useSomeDefaultNNparams(nn);
+    %nn = useSomeDefaultNNparams(nn);
    
     step = 5;
     stops = floor(epoch/step);
-    seq = repmat(step, stops);
+    seq = repmat(step, 1, stops);
     rem = mod(epoch, step);
     seq = [seq rem];
+    
+    for i=1:length(seq)
+        ep = list(seq);
+        % nn.epochs = ep;
+    end
 
     [nn, ~, L_train, L_val, clsfError_train, clsfError_val]  = trainNN(nn, train_x, train_y, val_x, val_y);
 
