@@ -106,9 +106,15 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
     nn.biases = biases;
 
     % if dropout is used then use max-norm constraint and a
-    %high learning rate + momentum with scheduling
+    % high learning rate + momentum with scheduling
     % see the function below for suggested values
     % nn = useSomeDefaultNNparams(nn);
+   
+    step = 5;
+    stops = floor(epoch/step);
+    seq = repmat(step, stops);
+    rem = mod(epoch, step);
+    seq = [seq rem];
 
     [nn, ~, L_train, L_val, clsfError_train, clsfError_val]  = trainNN(nn, train_x, train_y, val_x, val_y);
 
@@ -150,6 +156,7 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
     fprintf(fileID, '%21s | ', timestamp);
     fprintf(fileID, '%10.4f | ', stats.clsfRate);
     fprintf(fileID, strcat(repmat('%5d ', 1, length(nn.layersSize)), ' | '), nn.layersSize);
+    fprintf(fileID, strcat(repmat('%5d ', 1, length(nn.activation_functions )), ' | '), nn.activation_functions);
     fprintf(fileID, '%6d | ', nn.epochs);
     fprintf(fileID, '%10.3f | ', nn.trParams.lrParams.initialLR);
     fprintf(fileID, '%7d | ', nn.trParams.lrParams.lrEpochThres);
