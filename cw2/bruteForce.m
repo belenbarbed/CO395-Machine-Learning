@@ -1,4 +1,4 @@
-function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions, weightInit)
+function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingType, lrScalingFactor, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions, weightInit)
 
     % load MNIST data
     load('data4students.mat')
@@ -42,7 +42,8 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochL
     nn.trParams.lrParams.lrEpochThres = lrEpochThres;
     % set the learning rate update policy (check manual)
     % 1 = initialLR*lrEpochThres / max(lrEpochThres, T), 2 = scaling, 3 = lr / (1 + currentEpoch/lrEpochThres)
-    nn.trParams.lrParams.schedulingType = 1;
+    nn.trParams.lrParams.schedulingType = lrSchedulingType;
+    nn.trParams.lrParams.scalingFactor = lrScalingFactor;
 
     nn.trParams.momParams.schedulingType = 1;
     %set the epoch where the learning will begin to increase

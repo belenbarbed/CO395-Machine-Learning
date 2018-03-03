@@ -4,6 +4,8 @@ function bruteForceDriver
     epoch = 50;
     initialLR = 0.02;
     lrEpochThres = 10;
+    lrSchedulingType = 2; %2 = scaling
+    lrScalingFactor = 0.9; %Comment out if not using scaling
     momentumEpochLowerThres = 10;
     momentumEpochUpperThres = 25;
     hiddenActivationFunctions = {'ReLu','ReLu','sigm','softmax'};
