@@ -1,4 +1,4 @@
-function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingType, lrScalingFactor, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions, weightInit)
+function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingType, lrScalingFactor, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions, weightInit, L2, L1, maxNorm, dropoutType, earlyStopping, maxFail)
 
     % load MNIST data
     load('data4students.mat')
@@ -52,9 +52,9 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingTy
     nn.trParams.momParams.momentumEpochUpperThres = momentumEpochUpperThres;
 
     % set weight constraints
-    nn.weightConstraints.weightPenaltyL1 = 0;
-    nn.weightConstraints.weightPenaltyL2 = 0;
-    nn.weightConstraints.maxNormConstraint = 4;
+    nn.weightConstraints.weightPenaltyL1 = L1;
+    nn.weightConstraints.weightPenaltyL2 = L2;
+    nn.weightConstraints.maxNormConstraint = maxNorm;
 
     % show diagnostics to monnitor training  
     nn.diagnostics = 1;
@@ -65,11 +65,11 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingTy
     nn.showPlot = 1;
 
     % use bernoulli dropout
-    nn.dropoutParams.dropoutType = 0;
+    nn.dropoutParams.dropoutType = dropoutType;
 
     % if 1 then early stopping is used
-    nn.earlyStopping = 0;
-    nn.max_fail = 10;
+    nn.earlyStopping = earlyStopping;
+    nn.max_fail = maxFail;
 
     nn.type = 2;
 
@@ -93,16 +93,16 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingTy
     % see the function below for suggested values
     %nn = useSomeDefaultNNparams(nn);
    
-    step = 5;
-    stops = floor(epoch/step);
-    seq = repmat(step, 1, stops);
-    rem = mod(epoch, step);
-    seq = [seq rem];
-    
-    for i=1:length(seq)
-        ep = list(seq);
-        % nn.epochs = ep;
-    end
+%     step = 5;
+%     stops = floor(epoch/step);
+%     seq = repmat(step, 1, stops);
+%     rem = mod(epoch, step);
+%     seq = [seq rem];
+%     
+%     for i=1:length(seq)
+%         ep = list(seq);
+%         % nn.epochs = ep;
+%     end
 
     [nn, ~, L_train, L_val, clsfError_train, clsfError_val]  = trainNN(nn, train_x, train_y, val_x, val_y);
 
@@ -144,18 +144,21 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingTy
     fprintf(fileID, '%21s | ', timestamp);
     fprintf(fileID, '%10.4f | ', stats.clsfRate);
     fprintf(fileID, strcat(repmat('%5d ', 1, length(nn.layersSize)), ' | '), nn.layersSize);
-    fprintf(fileID, strcat(repmat('%5d ', 1, length(nn.activation_functions )), ' | '), nn.activation_functions);
+    fprintf(fileID, strcat(repmat('%7s ', 1, length(string(nn.activation_functions))), ' | '), string(nn.activation_functions));
     fprintf(fileID, '%6d | ', nn.epochs);
-    fprintf(fileID, '%10.3f | ', nn.trParams.lrParams.initialLR);
+    fprintf(fileID, '%6.4f | ', nn.trParams.lrParams.initialLR);
     fprintf(fileID, '%7d | ', nn.trParams.lrParams.lrEpochThres);
     fprintf(fileID, '%6d | ', nn.trParams.lrParams.schedulingType);
-    fprintf(fileID, '%5d | ', nn.trParams.momParams.schedulingType);
-    fprintf(fileID, '%6d | ', nn.trParams.momParams.momentumEpochLowerThres);
-    fprintf(fileID, '%6d | ', nn.trParams.momParams.momentumEpochUpperThres);
-    fprintf(fileID, '%6d | ', nn.dropoutParams.dropoutType);
-    fprintf(fileID, '%5d | ', nn.earlyStopping);
-    fprintf(fileID, '%6d | ', nn.max_fail);
-    fprintf(fileID, '%6d',    nn.weightInitParams.type);
+    fprintf(fileID, '%9.3f | ', nn.trParams.lrParams.scalingFactor);
+    fprintf(fileID, '%8d | ', nn.trParams.momParams.momentumEpochLowerThres);
+    fprintf(fileID, '%8d | ', nn.trParams.momParams.momentumEpochUpperThres);
+    fprintf(fileID, '%8d | ', nn.dropoutParams.dropoutType);
+    fprintf(fileID, '%7d | ', nn.earlyStopping);
+    fprintf(fileID, '%7d | ', nn.max_fail);
+    fprintf(fileID, '%10d |', nn.weightInitParams.type);
+    fprintf(fileID, '%6.3f |',  nn.weightConstraints.weightPenaltyL1);
+    fprintf(fileID, '%6.3f |',  nn.weightConstraints.weightPenaltyL2);
+    fprintf(fileID, '%7.3f',    nn.weightConstraints.maxNormConstraint);
     fprintf(fileID, '\n');
     fclose(fileID);
 end
