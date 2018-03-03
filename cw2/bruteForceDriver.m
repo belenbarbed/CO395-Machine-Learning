@@ -11,5 +11,5 @@ function bruteForceDriver
     hiddenActivationFunctions = {'ReLu','ReLu','sigm','softmax'};
     weightInit = 8;
 
-    bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions, weightInit);
+    bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingType, lrScalingFactor, momentumEpochLowerThres, momentumEpochUpperThres, hiddenActivationFunctions, weightInit);
 end
