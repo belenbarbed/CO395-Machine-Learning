@@ -8,10 +8,10 @@ function bruteForceDriver
     epoch = 50;
     
     % Learning Rate Params
-    initialLR = 0.0125;
-    lrEpochThres = 1;
-    lrSchedulingType = 2; % 1 = decrease after lrEpochThres, 2 = scaling, 3 = decrease until half at lrEpochThres
-    lrScalingFactor = 0.8; % scaling factor per epoch for lrSchedulingType = 2
+    initialLR = 0.05;
+    lrEpochThres = 10;
+    lrSchedulingType = 1; % 1 = decrease after lrEpochThres, 2 = scaling, 3 = decrease until half at lrEpochThres
+    lrScalingFactor = 0.99; % scaling factor per epoch for lrSchedulingType = 2
     
     % Momentum Params
     momentumEpochLowerThres = 1;
@@ -26,7 +26,7 @@ function bruteForceDriver
     maxNorm = 0; % maximum norm allowed, if 0 then it's disabled
     
     % Dropout Params
-    dropoutType = 0; % Enable Dropout
+    dropoutType = 1; % Enable Dropout
     
     % Stopping Criterion
     earlyStopping = 1; % Enable early stopping
