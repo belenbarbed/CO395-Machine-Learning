@@ -9,12 +9,12 @@ function bruteForceDriver
     
     % Learning Rate Params
     initialLR = 0.0125;
-    lrEpochThres = 10;
-    lrSchedulingType = 1; % 1 = decrease after lrEpochThres, 2 = scaling, 3 = decrease until half at lrEpochThres
-    lrScalingFactor = 0.5; % scaling factor per epoch for lrSchedulingType = 2
+    lrEpochThres = 1;
+    lrSchedulingType = 2; % 1 = decrease after lrEpochThres, 2 = scaling, 3 = decrease until half at lrEpochThres
+    lrScalingFactor = 0.8; % scaling factor per epoch for lrSchedulingType = 2
     
     % Momentum Params
-    momentumEpochLowerThres = 10;
+    momentumEpochLowerThres = 1;
     momentumEpochUpperThres = 40;
     
     % Weight Initialisation Method
