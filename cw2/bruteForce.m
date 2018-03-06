@@ -25,6 +25,10 @@ function bruteForce(hiddenLayers, epoch, initialLR, lrEpochThres, lrSchedulingTy
 
     inputActivationFunction = 'linear'; %sigm for binary inputs, linear for continuous input
 
+    %train_x = train_x/255;
+    %val_x = val_x/255;
+    %test_x = test_x/255;
+    
     % normalise data
     train_x = normaliseData(inputActivationFunction, train_x, []);
     val_x = normaliseData(inputActivationFunction, val_x, []);
