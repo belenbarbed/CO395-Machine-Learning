@@ -24,7 +24,7 @@ p2 = semilogx(L2coef1,ValErr1, 'r-', 'Markersize', 8);
 title('L2 Regularisation, 50 epochs, lr:0.05(scalling:0.99)')
 xlabel('L2 coefficient')
 ylabel('(%)')
-legend([p1,p2], {'TestCR','ValidationError'},'Location','NorthEast')
+legend([p1,p2], {'TestCR','ValidationError'},'Location','East')
 hold off
 % save figure
 saveas(gca, strcat(dir, timestamp, '_L2_setting_1.png'))
@@ -38,7 +38,7 @@ p2 = semilogx(L2coef2,ValErr2, 'r-', 'Markersize', 8);
 title('L2 Regularisation, 50 epochs, lr:0.05')
 xlabel('L2 coefficient')
 ylabel('(%)')
-legend([p1,p2], {'TestCR','ValidationError'},'Location','NorthEast')
+legend([p1,p2], {'TestCR','ValidationError'},'Location','East')
 hold off
 % save figure
 saveas(gca, strcat(dir, timestamp, '_L2_setting_2.png'))
@@ -52,7 +52,7 @@ p2 = semilogx(L2coef3,ValErr3, 'r-', 'Markersize', 8);
 title('L2 Regularisation, 50 epochs, lr:0.0125(scalling:0.85)')
 xlabel('L2 coefficient')
 ylabel('(%)')
-legend([p1,p2], {'TestCR','ValidationError'},'Location','NorthEast')
+legend([p1,p2], {'TestCR','ValidationError'},'Location','East')
 hold off
 % save figure
 saveas(gca, strcat(dir, timestamp, '_L2_setting_3.png'))
