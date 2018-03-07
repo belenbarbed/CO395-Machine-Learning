@@ -2,10 +2,10 @@ function bruteForceDriver
     
     % NW Architecture
     hiddenLayers = [750 750 500 7];
-    hiddenActivationFunctions = {'ReLu','ReLu','ReLu','softmax'};
+    hiddenActivationFunctions = {'sigm','sigm','sigm', 'softmax'};
     
     % Epochs
-    epoch = 100;
+    epoch = 50;
     
     % Learning Rate Params
     initialLR = 0.05;
